@@ -1,0 +1,37 @@
+Deliverables
+
+Slide Deck in PDF
+Project Canvas in PDF
+GitHub Repository Link (ยังไม่ต้องสมบูรณ์ แต่อัพเดทได้ถึงวันที่ 11 พ.ค. 11:59pm)
+Live 7 Minutes Presentation (English or Thai) with 3 minutes Q&A
+
+
+Section	Criteria	Max Points	Excellent (High Score)	Satisfactory (Mid Score)	Needs Improvement (Low Score)
+Section 1: Strategic Alignment (15 Points)
+This section evaluates how well the group understands the business context and defines success.
+1. Background & Pain Points	7	(6 - 7 pts): Clearly articulates the scam problem and legacy system limitations. Understands APP Fraud (voluntary transfer) and clearly identifies the financial/compliance impact on the bank.	(4 - 5 pts): Identifies the problem correctly but explains it too broadly. Lacks specific details regarding mule account behaviors in the real world.	(1 - 3 pts): Misunderstands the business context, identifies the wrong problem, or fails to link the issue to financial loss.
+1. SMART Objectives	8	(7 - 8 pts): Objectives are 100% SMART. Contains clear, measurable numeric targets relevant to Fraud (e.g., reduce False Positives, increase Recall).	(4 - 6 pts): Mostly clear but missing 1-2 SMART elements (e.g., lacks a timeframe, or the metric is just a variable name, not a success target).	(1 - 3 pts): Objectives are vague, unmeasurable, or completely irrelevant to mule account detection.
+Section 2: Analytical Design (25 Points)
+This section evaluates the logic used to set up the data investigation.
+2. Hypothesis, Method & 5W1H	10	(9 - 10 pts): Uses 5W1H as sharp "analytical questions." Formulates accurate hypotheses on mule behavior and selects appropriate metrics (e.g., Outflow Ratio, Velocity).	(6 - 8 pts): Includes 5W1H but writes them as "facts/statements" instead of questions. Hypotheses and metrics are basic and lack behavioral depth.	(1 - 5 pts): Lacks clear 5W1H. Hypotheses cannot be tested with available data, or inappropriate analytical methods are chosen.
+2. GitHub Documentation	15	(13 - 15 pts): Professionally organized folders. Comprehensive README.md. Includes all code and data files.	(8 - 12 pts): Functional but messy. README lacks key details, or files were uploaded all at once	(1 - 7 pts): Disorganized structure, missing crucial files, or no README description at all.
+Section 3: Data Execution & EDA (30 Points)
+This section focuses on the technical application and the quality of the AI-generated dataset.
+3. AI Data Quality	10	(9 - 10 pts): Excellent schema design. Realistic simulation of class imbalance (fraud is rare). Handles data cleaning without destroying the fraud signals (e.g., does not drop outliers).	(6 - 8 pts): Functional schema, but synthetic data might be "too perfect/linearly separable" or handling of missing values/outliers slightly dilutes the fraud signal.	(1 - 5 pts): Random, unrealistic data. Fails to align with banking behaviors, or accidentally deletes all fraud data during the data cleaning process.
+3. EDA & Visualizations	20	(17 - 20 pts): High-quality, readable charts that answer the 5W1H. Excellent strategy for imbalanced data (e.g., Log scale, Boxplots for outliers). Successfully extracts actual mule behaviors.	(11 - 16 pts): Technically correct plots but basic. Fails to deeply answer business questions or clearly differentiate mule accounts from normal ones visually.	(1 - 10 pts): Uses inappropriate charts (e.g., a pie chart with 20 slices). Visuals are misleading or provide zero actionable insights.
+Section 4: Insights & Impact (15 Points)
+This section evaluates the "Business Intelligence" aspect—turning data into value.
+4. Findings	7	(6 - 7 pts): Accurately interprets results. Identifies specific behavioral footprints of mules (e.g., Hit & Run velocity, account draining effect).	(4 - 5 pts): Superficial conclusions (e.g., "mules transfer more money"), without analyzing deep patterns or transaction velocity.	(1 - 3 pts): Misinterprets data, contradicts their own charts, or fails to draw any useful conclusions.
+4. Recommendations	8	(7 - 8 pts): Actionable, specific recommendations that can be translated into system rules/alerts immediately. Balances security with customer experience (Trade-off: Security vs. False Positives).	(4 - 6 pts): Broad or generic advice (e.g., "monitor mule accounts more closely"). Lacks specificity or proposes rules that would severely disrupt normal customers.	(1 - 3 pts): Recommendations do not align with insights, or proposes unrealistic methods that cannot be implemented in a real banking environment.
+Section 5: Communication & Presentation (15 Points)
+This section evaluates the live delivery and professional quality.
+5. Live Presentation & Defense	10	(8 - 10 pts): Excellent storytelling and clear slides. Perfectly manages time (7 mins presentation + 3 mins Q&A). Handles Q&A with deep analytical defense.	(4 - 7 pts): Standard delivery. Slightly over/under the time limit. Q&A defense leans on only one member or lacks analytical depth.	(1 - 3 pts): Poor time management (significantly exceeds 7 mins). Stumbling presentation or inability to answer questions.
+5. Participant Questioning	5	(4 - 5 pts): Demonstrates mastery through sharp questioning. Every group representative actively participates in asking questions or defending analytical choices regarding the presenter's methods.	(2 - 3 pts): Shows engagement, but only some group members participate in questioning. Questions may be basic clarifications rather than challenging analytical choices.	(1 pt): Little to no participation from the group. Questions asked are superficial, off-topic, or show a lack of understanding of the subject matter.
+
+ตัวอย่างงานเขียนบน Github
+1. https://github.com/LN1616/Sales-growth-forecast-ornaments-other-DS512-513
+2. https://github.com/pmilinr/DS512-513/tree/main
+3. https://github.com/Aunwika/Pizza-Delivery-Project
+4. https://github.com/chanakarnsomchaipeng-design/DS512
+
+ไม่ต้องอิง github เยอะก็ได้อยากขึ้นโครงเอง

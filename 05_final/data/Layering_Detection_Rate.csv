@@ -1,0 +1,4 @@
+Layer,Total_Mule_Transactions,Detection_Rate_Pct,Detected_Count,Missed_Count
+Layer1,235,80,188,47
+Layer2,122,45,55,67
+Layer3+,30,12,4,26

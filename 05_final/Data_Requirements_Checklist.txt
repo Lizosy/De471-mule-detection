@@ -1,0 +1,265 @@
+================================================================
+DATA REQUIREMENTS CHECKLIST
+สิ่งที่ Dataset ต้องมี เพื่อให้ตรงกับ Rubric + หัวข้อเรา
+================================================================
+
+หัวข้อโปรเจกต์: Fan-in/Fan-out Pattern + Layering Depth
+                ในการตรวจจับบัญชีม้า
+
+
+================================================================
+PART 1: ตรวจสอบกับ RUBRIC (Section 3 — Data Quality 10 pts)
+================================================================
+
+[✓] Realistic Class Imbalance
+    Rubric: "Realistic simulation of class imbalance (fraud is rare)"
+    → บัญชีม้า 2-5% (ไม่ใช่ 50:50 ที่ดูปลอม)
+    → ในงานจริง APP Fraud มีแค่ 1-3%
+
+[✓] Schema Design ที่สะท้อนพฤติกรรมจริง
+    Rubric: "Excellent schema design"
+    → ต้องมีคอลัมน์ที่ใช้คำนวณ Outflow Ratio, Velocity ได้
+    → ต้องมี Timestamp ละเอียดถึงระดับนาที
+
+[✓] ห้ามลบ Outliers ทิ้ง
+    Rubric: "does not drop outliers"
+    → ค่าผิดปกติ = สัญญาณทุจริต
+    → Outlier ในยอดเงินสูงคือบัญชีม้า
+
+[✓] Data Cleaning ไม่ทำลาย Signal
+    Rubric: "Handles data cleaning without destroying the fraud signals"
+    → Missing Values ใน Channel = อาจเป็นเงินสด ห้ามลบ
+    → Outlier ใน Amount = อาจเป็น Fan-in ห้ามลบ
+
+
+================================================================
+PART 2: ตรวจสอบกับ HYPOTHESIS (Section 2 — 10 pts)
+================================================================
+
+Rubric ระบุชัด: "Outflow Ratio, Velocity"
+
+[✓] Outflow Ratio คำนวณได้
+    สูตร: Total_Out / Total_In × 100
+    ต้องมี: From_Account, To_Account, Amount
+
+[✓] Velocity (จำนวนธุรกรรม/หน่วยเวลา) คำนวณได้
+    สูตร: COUNT(Transactions) / Time_Window
+    ต้องมี: Timestamp ละเอียด
+
+[✓] Hit & Run Velocity (Rubric Section 4)
+    สูตร: Time_Out - Time_In (นาที)
+    ต้องมี: Timestamp คู่ Receive/Send ของบัญชีเดียวกัน
+
+[✓] Account Draining Effect (Rubric Section 4)
+    สูตร: Balance_After / Total_Received
+    ต้องมี: Balance ก่อน-หลังทำรายการ
+
+
+================================================================
+PART 3: ตรวจสอบกับหัวข้อ FAN-IN/FAN-OUT + LAYERING
+================================================================
+
+[✓] Fan-in Pattern ตรวจจับได้
+    ต้องมี: To_Account ซ้ำหลายครั้งจาก From_Account ต่างกัน
+    + Timestamp ในช่วงเวลาใกล้ๆ กัน (< 1 ชั่วโมง)
+
+[✓] Fan-out Pattern ตรวจจับได้
+    ต้องมี: From_Account ซ้ำ ส่งไป To_Account หลายราย
+    + ภายใน 15-30 นาที หลังรับเงิน
+
+[✓] Layering Depth ระบุได้
+    ต้องมี: Label ชั้น (Layer 1, 2, 3+)
+    หรือ Trace ได้จาก Sender/Receiver chain
+
+[✓] Detection Rate by Layer
+    ต้องมีกฎว่าระบบเดิมจับได้แค่ใหญ่ๆ
+    → Layer 1 = 80%, Layer 2 = 45%, Layer 3+ = 12%
+
+
+================================================================
+PART 4: ตรวจสอบกับ 5W1H (Section 2 — Analytical Questions)
+================================================================
+
+WHO — บัญชีประเภทไหนเป็นบัญชีม้า?
+[✓] Account_Age_Days (บัญชีใหม่ vs เก่า)
+[✓] Is_Mule (Target Variable)
+
+WHAT — ตัวชี้วัดอะไรบอกได้?
+[✓] Amount (ยอดเงิน)
+[✓] Outflow_Ratio (% เงินไหลออก)
+[✓] Velocity (ความถี่ธุรกรรม)
+
+WHERE — ช่องทางไหนเสี่ยงสุด?
+[✓] Channel (PromptPay/Mobile/ATM/Branch)
+[✓] เพิ่ม IP_Address หรือ Device ถ้าทำได้
+
+WHEN — เกิดช่วงเวลาไหน?
+[✓] Timestamp (ละเอียดระดับนาที)
+[✓] ดูได้ว่ากลางคืน/วันหยุด/ในเวลาทำการ
+
+WHY — ทำไมถึงโอนออกทันที?
+[✓] Time_To_Outflow (วัด Hit & Run)
+[✓] Balance_After (วัด Account Draining)
+
+HOW — ใช้วิธีไหนตรวจ?
+[✓] Risk_Score (รวมหลาย signal)
+[✓] Pattern_Type (Fan-in/Fan-out/Cash-out)
+
+
+================================================================
+PART 5: ตรวจสอบกับ FINDINGS & RECOMMENDATIONS (Section 4)
+================================================================
+
+[✓] Hit & Run Velocity Insight
+    Rubric: "Hit & Run velocity"
+    Data ต้องมี Timestamp คู่ → คำนวณ Time_To_Outflow
+
+[✓] Account Draining Effect
+    Rubric: "account draining effect"
+    Data ต้องมี Balance_After → คำนวณ Outflow_Ratio
+
+[✓] Trade-off: Security vs False Positives
+    Rubric: "Balances security with customer experience"
+    Data ต้องมี Ground Truth (Is_Mule) → คำนวณ Precision/Recall
+
+
+================================================================
+DATASET SCHEMA สุดท้าย (รวมทุก Requirement)
+================================================================
+
+[ ตารางที่ 1: TRANSACTIONS ]
+─────────────────────────────────────────────────────────────
+คอลัมน์                ประเภท     ใช้ตอบ Rubric อะไร
+─────────────────────────────────────────────────────────────
+Transaction_ID         String     -
+Timestamp              DateTime   WHEN, Velocity, Hit&Run
+From_Account           String     Fan-in/out source
+To_Account             String     Fan-in/out target
+Amount                 Float      WHAT, Outlier analysis
+Channel                String     WHERE (PromptPay/Mobile/ATM)
+Sender_Age_Days        Integer    WHO (บัญชีใหม่?)
+Receiver_Age_Days      Integer    WHO
+Sender_Balance_Before  Float      Account Draining
+Sender_Balance_After   Float      Account Draining
+Layer_Depth            Integer    Layering Insight (0,1,2,3+)
+Pattern_Type           String     Fan-in/Fan-out/Normal/Cash-out
+Is_Mule                Integer    Ground Truth (Target)
+─────────────────────────────────────────────────────────────
+
+[ ตารางที่ 2: ACCOUNT_SUMMARY (Aggregate) ]
+─────────────────────────────────────────────────────────────
+Account_ID             String     ID
+Account_Age_Days       Integer    WHO
+Total_In_Amount        Float      Outflow Ratio numerator
+Total_Out_Amount       Float      Outflow Ratio denominator
+Outflow_Ratio          Float      Calculated metric
+Fan_In_Count           Integer    จำนวนต้นทางที่ส่งเข้ามา
+Fan_Out_Count          Integer    จำนวนปลายทางที่ส่งออก
+Avg_Time_To_Outflow    Float      Hit & Run velocity (นาที)
+Min_Balance            Float      Account Draining
+Total_Transactions     Integer    Velocity
+Risk_Score             Integer    0-100 Calculated
+Risk_Level             String     Normal/Watch/High Risk
+Is_Mule                Integer    Ground Truth
+─────────────────────────────────────────────────────────────
+
+
+================================================================
+สัดส่วนข้อมูลที่แนะนำ (Imbalance Realism)
+================================================================
+
+ระดับธุรกรรม (Transactions):
+  - ปกติ        : 9,500 รายการ (~95%)
+  - บัญชีม้า    :   500 รายการ (~5%)
+  - รวม        : 10,000 รายการ
+
+ระดับบัญชี (Accounts):
+  - บัญชีปกติ   : 950 บัญชี (95%)
+  - บัญชีม้า    :  50 บัญชี (5%)
+    └─ Layer 1 :  20 บัญชี
+    └─ Layer 2 :  20 บัญชี
+    └─ Layer 3+:  10 บัญชี
+  - เหยื่อ     : 200 บัญชี (สำหรับ Fan-in)
+
+ระยะเวลา:
+  - 6-12 เดือน เพื่อดู Pattern ตามเวลา
+
+
+================================================================
+PATTERN ที่ต้องฝังในข้อมูลให้ชัดเจน
+================================================================
+
+1. FAN-IN PATTERN
+   - บัญชีม้า Layer 1 รับจากเหยื่อ 4-10 คน
+   - ภายในช่วงเวลา < 60 นาที
+   - ยอดต่อรายการ 5,000 - 80,000 บาท
+
+2. FAN-OUT PATTERN (Hit & Run)
+   - Layer 1 โอนออกไป Layer 2 ภายใน 5-15 นาที
+   - กระจาย 3-6 ปลายทาง
+   - ยอดต่อรายการ 3,000 - 30,000 บาท
+
+3. ACCOUNT DRAINING
+   - Sender_Balance_After ≈ 0 หลังโอนออก
+   - Outflow_Ratio > 95%
+
+4. LAYERING DEPTH
+   - Layer 1 (40 บัญชี) → ระบบเดิมจับได้ 80%
+   - Layer 2 (80 บัญชี) → ระบบเดิมจับได้ 45%
+   - Layer 3+ (60 บัญชี) → ระบบเดิมจับได้ 12%
+
+5. CHANNEL BIAS (สำหรับ WHERE)
+   - บัญชีม้า: 80% PromptPay/Mobile, 15% ATM, 5% Branch
+   - บัญชีปกติ: 50% PromptPay/Mobile, 20% ATM, 30% Branch
+
+6. TIME-OF-DAY BIAS (สำหรับ WHEN)
+   - บัญชีม้า: 60% กลางคืน (22:00-06:00)
+   - บัญชีปกติ: 80% เวลาทำการ (09:00-20:00)
+
+
+================================================================
+DATA QUALITY CHECKS ที่ต้องเขียนใน Notebook
+================================================================
+
+ก่อนวิเคราะห์ ต้องแสดงให้เห็นว่าเข้าใจ Rubric:
+
+[1] Missing Values Check
+    → ผลลัพธ์: ไม่ลบรายการ Channel = NaN
+    → เหตุผล: อาจเป็นรายการเงินสดที่ตั้งใจปกปิด
+
+[2] Outlier Analysis (IQR Method)
+    → แสดง Boxplot ของ Amount
+    → ผลลัพธ์: Outlier เกือบทั้งหมด = บัญชีม้า
+    → เหตุผล: ห้ามลบ — นี่คือ Fraud Signal
+
+[3] Class Imbalance Visualization
+    → Pie Chart: 95% Normal vs 5% Mule
+    → ใช้ Log Scale ในกราฟอื่นเพื่อให้เห็น Mule
+
+[4] Duplicate Check
+    → Transaction_ID ห้ามซ้ำ
+    → From_Account = To_Account (Self-transfer) = ลบได้
+
+[5] Date Range Validation
+    → Timestamp อยู่ในช่วง 12 เดือน
+    → ไม่มี Future Date
+
+
+================================================================
+สรุป: CHECKLIST ก่อนเริ่ม Generate Data
+================================================================
+
+□ มี Class Imbalance 95:5
+□ มี Timestamp ระดับนาที
+□ มี From/To Account สำหรับ Fan-in/out
+□ มี Balance ก่อน-หลัง สำหรับ Draining
+□ มี Layer_Depth Label (0,1,2,3+)
+□ มี Channel หลายแบบ (สำหรับ WHERE)
+□ มี Account_Age (สำหรับ WHO)
+□ มี Pattern_Type (Fan-in/Fan-out/Normal)
+□ มี Is_Mule Ground Truth
+□ ระยะเวลา 6-12 เดือน
+□ มี Outliers ที่เป็น Fraud Signal (ไม่ลบ)
+□ Pattern ฝังให้สะท้อนพฤติกรรมจริง
+
+================================================================

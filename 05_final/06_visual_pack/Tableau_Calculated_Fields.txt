@@ -1,0 +1,68 @@
+TABLEAU CALCULATED FIELDS (USE WITH SAME BASE DATA)
+===================================================
+
+Data source: Account_Summary.csv
+--------------------------------
+1) Pred_HighRisk
+IF [Risk_Score] >= 70 THEN 1 ELSE 0 END
+
+2) Rule_FanIn
+IF [Fan_In_Count] > 4 THEN 1 ELSE 0 END
+
+3) Rule_HitRun
+IF [Avg_Time_To_Outflow_Min] > 0 AND [Avg_Time_To_Outflow_Min] <= 15 THEN 1 ELSE 0 END
+
+4) Rule_Draining
+IF [Outflow_Ratio_Pct] > 95 THEN 1 ELSE 0 END
+
+5) Rule_NewAcct
+IF [Account_Age_Days] < 60 AND [Fan_In_Count] > 3 THEN 1 ELSE 0 END
+
+6) Rules_Triggered
+[Rule_FanIn] + [Rule_HitRun] + [Rule_Draining] + [Rule_NewAcct]
+
+7) Is_TruePositive
+IF [Pred_HighRisk] = 1 AND [Is_Mule] = 1 THEN 1 ELSE 0 END
+
+8) Is_FalsePositive
+IF [Pred_HighRisk] = 1 AND [Is_Mule] = 0 THEN 1 ELSE 0 END
+
+9) Is_FalseNegative
+IF [Pred_HighRisk] = 0 AND [Is_Mule] = 1 THEN 1 ELSE 0 END
+
+10) Is_TrueNegative
+IF [Pred_HighRisk] = 0 AND [Is_Mule] = 0 THEN 1 ELSE 0 END
+
+11) Risk_Bin
+IF [Risk_Score] <= 19 THEN "00-19"
+ELSEIF [Risk_Score] <= 39 THEN "20-39"
+ELSEIF [Risk_Score] <= 59 THEN "40-59"
+ELSEIF [Risk_Score] <= 69 THEN "60-69"
+ELSEIF [Risk_Score] <= 79 THEN "70-79"
+ELSEIF [Risk_Score] <= 89 THEN "80-89"
+ELSE "90-100"
+END
+
+12) Recall_Pct
+SUM([Is_TruePositive]) / (SUM([Is_TruePositive]) + SUM([Is_FalseNegative]))
+
+13) Precision_Pct
+SUM([Is_TruePositive]) / (SUM([Is_TruePositive]) + SUM([Is_FalsePositive]))
+
+14) FPR_Pct
+SUM([Is_FalsePositive]) / (SUM([Is_FalsePositive]) + SUM([Is_TrueNegative]))
+
+Data source: Transactions.csv
+-----------------------------
+15) Txn_Hour
+DATEPART('hour', [Timestamp])
+
+16) Time_Band
+IF [Txn_Hour] >= 22 OR [Txn_Hour] <= 6 THEN "Night_22_06"
+ELSE "Day_07_21"
+END
+
+17) Channel_Group
+IF [Channel] = "PromptPay" OR [Channel] = "Mobile_App" THEN "Digital"
+ELSE "Non_Digital"
+END

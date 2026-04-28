@@ -1,0 +1,9 @@
+Channel,Is_Mule,Txn_Count,Within_Group_Pct
+ATM,0,674,9.78
+ATM,1,38,9.82
+Branch,0,1436,20.84
+Branch,1,17,4.39
+Mobile_App,0,2735,39.7
+Mobile_App,1,131,33.85
+PromptPay,0,2045,29.68
+PromptPay,1,201,51.94

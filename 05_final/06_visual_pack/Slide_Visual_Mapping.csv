@@ -1,0 +1,13 @@
+Slide,Visual_Name,Data_Source,Primary_Message,Rubric_Link
+6,KPI Cards,data/viz_marts/kpi_overview.csv,Class imbalance and operating targets are explicit,"Section 3, Section 4"
+8,Fan-in Boxplot,data/Account_Summary.csv,Fan-in alone is not enough and needs combined signals,"Section 2, Section 3"
+9,Time to Outflow,data/Account_Summary.csv,Hit-and-run velocity clearly separates mule behavior,"Section 2, Section 4"
+10,Outflow vs Fan-in Scatter,data/Account_Summary.csv,Best separability appears when combining two behavior features,"Section 2, Section 3"
+11,Layer Detection Gap,data/viz_marts/layer_performance_extended.csv,Legacy detection collapses at deeper layers,"Section 4"
+12,Channel Mix,data/viz_marts/channel_mix_pct.csv,Mules over-index on PromptPay and digital rails,"Section 2, Section 3"
+12,Hourly Profile,data/viz_marts/hourly_profile.csv,Mule transactions skew toward night activity,"Section 2, Section 4"
+13,Layer Flow Summary,data/viz_marts/layer_flow_edges.csv,Fund flow path supports fan-in to fan-out to cash-out narrative,"Section 4"
+14,Rule Trigger Heatmap,data/viz_marts/rule_trigger_matrix.csv,Rule combinations explain high-risk scoring decisions,"Section 4"
+14,Risk Score Bins,data/viz_marts/risk_score_bins.csv,Threshold calibration is visible and auditable,"Section 4"
+15,Threshold Trade-off Curve,data/viz_marts/threshold_tradeoff_curve.csv,Shows recall-vs-fpr operating point for policy decision,"Section 4"
+15,False Positive Review,data/viz_marts/false_positive_review.csv,Trade-off control to protect customer experience,"Section 4"

@@ -1,0 +1,12 @@
+Metric,Value,Format
+Total_Transactions,7277,number
+Total_Accounts,1103,number
+Mule_Transactions_Pct,5.32,percent
+Mule_Accounts_Pct,13.87,percent
+Recall_at_Risk70_Pct,16.34,percent
+Precision_at_Risk70_Pct,100.0,percent
+FPR_at_Risk70_Pct,0.0,percent
+ConfusionMatrix_TP,25,number
+ConfusionMatrix_FP,0,number
+ConfusionMatrix_FN,128,number
+ConfusionMatrix_TN,950,number

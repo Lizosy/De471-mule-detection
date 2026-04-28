@@ -1,0 +1,41 @@
+# ============================================================
+# Default: ignore everything at the project root
+# ============================================================
+/*
+
+# ------------------------------------------------------------
+# Allow these top-level entries
+# ------------------------------------------------------------
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/05_final
+!/02_Notebooks
+
+# ------------------------------------------------------------
+# 02_Notebooks: only the FINAL notebook + its figures
+# ------------------------------------------------------------
+/02_Notebooks/*
+!/02_Notebooks/Mule_Detection_Final_Analysis.ipynb
+!/02_Notebooks/figures
+/02_Notebooks/figures/.ipynb_checkpoints
+/02_Notebooks/.ipynb_checkpoints
+
+# ------------------------------------------------------------
+# 05_final: keep everything except junk
+# ------------------------------------------------------------
+# Tableau autosave / lock files
+/05_final/data/~*
+/05_final/data/*.twbr
+/05_final/**/.ipynb_checkpoints
+
+# ------------------------------------------------------------
+# Generic
+# ------------------------------------------------------------
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.env
+.DS_Store
+Thumbs.db
